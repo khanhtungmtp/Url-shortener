@@ -1,0 +1,162 @@
+<div class="d-flex flex-column min-vh-100">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 offset-lg-1">
+
+        <h1 class="mt-4 text-primary text-center site-name">
+          URL Shortener</h1>
+
+        <div class="card mt-4">
+          <div class="card-body">
+            <h5 class="card-title text-center mb-4">
+              Paste the long URL and make it short! </h5>
+
+            <form id="shortForm">
+              <div class="input-group mb-4">
+                <input type="text" class="form-control form-control-lg"
+                  name="url" id="url"
+                  placeholder="https://facebook.com/khanhtungmtp"
+                  [(ngModel)]="longUrl">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" id="create" type="button"
+                    (click)="createUrlShortener()">
+                    SHORTEN </button>
+                </div>
+              </div>
+              <p class="mt-4 text-center text-white bg-danger"
+                *ngIf="errorMessage !=''">
+                {{errorMessage}} </p>
+            </form>
+
+            <p class="mt-4 text-center">
+              This is a free online service which helps you
+              shorten long URLs that never expire. </p>
+
+          </div>
+        </div>
+
+        <div id="short-area" [ngClass]="!isShortener ? 'disnone' : ''">
+          <h2 class="mt-4 text-primary text-center site-name">
+            Your shortened URL </h2>
+
+          <div class="card">
+            <div class="card-body">
+
+              <div class="form-group row">
+                <label for="shortlink" class="col-md-2 col-form-label">
+                  Short link </label>
+                <div class="col-md-10">
+                  <div class="input-group mb-4">
+                    <input type="text" class="form-control form-control-lg"
+                      name="shortLink" id="shortlink" [value]="textToCopy">
+
+                    <div class="input-group-append">
+                      <button class="btn" [class.btn-primary]="!isCopied"
+                        [class.btn-success]="isCopied" (click)="copyText()">
+                        {{ isCopied ? 'Copied' : 'Copy' }}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-md-2 col-form-label qr-label">QR
+                  Code</label>
+                <div class="col-md-10">
+                  <qrcode [qrdata]="textToCopy" [width]="256"
+                    [allowEmptyString]="true" [errorCorrectionLevel]="'M'">
+                  </qrcode>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4"></div>
+
+        <ul class="list-group list-group-horizontal-md mt-4"
+          style="width: 100%">
+          <li class="list-group-item flex-fill">
+            Total Hits: <strong>3,757,984</strong>
+          </li>
+          <li class="list-group-item flex-fill">
+            Total URLs: <strong>{{allShortenedUrl.count}}</strong>
+          </li>
+          <li class="list-group-item flex-fill">
+            Today's added URLs: <strong>{{allShortenedUrl.countToday}}</strong>
+          </li>
+        </ul>
+
+        <h3 class="text-primary mt-4">Recently added URLs</h3>
+        <div class="table-responsive">
+          <table class="table table-results">
+            <thead class="table-primary">
+              <tr>
+                <th>Short URL</th>
+                <th>Long URL</th>
+                <th>Datetime</th>
+                <th>Hits</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="(listShortenedUrl ?? []).length > 0">
+                <tr *ngFor="let item of listShortenedUrl">
+                  <td>
+                    <a [href]="baseUrl + item.shortUrl" target="_blank"
+                      rel="noopener">
+                      {{baseUrl + item.shortUrl}}
+                    </a>
+                  </td>
+                  <td>{{item.originalUrl}}</td>
+                  <td>{{item.createdAt | date:'dd/MM/yyyy, h:mm:ss a'}}</td>
+                  <td>2</td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="text-primary mt-4">Most popular URLs</h3>
+        <div class="table-responsive">
+          <table class="table table-results">
+            <thead class="table-primary">
+              <tr>
+                <th>Short URL</th>
+                <th>Long URL</th>
+                <th>Datetime</th>
+                <th>Hits</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <a href="https://facebook.com/khanhtungmtp" target="_blank"
+                    rel="noopener">
+                    Khanh Tùng </a>
+                </td>
+                <td>https://lorem.com</td>
+                <td>2013-03-02 14:36:26</td>
+                <td>183,363</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="mt-auto">
+    <div class="container">
+      <div class="row mt-3">
+        <div class="col-lg-10 offset-lg-1">
+          <p>Developed by <strong><a
+                href="https://facebook.com/khanhtungmtp">Khanh
+                Tùng</a></strong></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

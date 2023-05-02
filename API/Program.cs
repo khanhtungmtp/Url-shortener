@@ -11,6 +11,8 @@ builder.Services.AddCors(opt => opt.AddDefaultPolicy(p =>
 p.WithOrigins("http://localhost:4200", "https://localhost:4200")
 .AllowAnyHeader().AllowAnyMethod().AllowCredentials()
 ));
+// Add AutoMapper
+builder.Services.AddAutoMapper(typeof(AutomaperConfig));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

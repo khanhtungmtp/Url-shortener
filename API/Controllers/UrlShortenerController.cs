@@ -1,7 +1,9 @@
 using System.Text.RegularExpressions;
 using API.Data;
+using API.Dtos;
 using API.Helpers;
 using API.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +14,11 @@ namespace API.Controllers
     public class UrlShortenerController : ControllerBase
     {
         private readonly DataContext _context;
-        public UrlShortenerController(DataContext context)
+        private readonly IMapper _mapper;
+        public UrlShortenerController(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         [HttpGet("GetUrlShortener")]
         public async Task<IActionResult> GetUrlShortener(string shortCode)
@@ -33,11 +37,11 @@ namespace API.Controllers
             List<ShortenedUrl>? allshortenUrlToday = _context.ShortenedUrl
                 .Where(s => EF.Functions.DateDiffDay(s.CreatedAt, DateTime.Today) == 0) // filter by the date component of the CreatedAt field
                 .ToList();
-            AllShortenedUrl listUrl = new AllShortenedUrl
+            AllShortenedUrlDto listUrl = new AllShortenedUrlDto
             {
                 Count = count,
                 CountToday = allshortenUrlToday.Count(),
-                ListShortenedUrl = listUrlShortener
+                ListShortenedUrl = _mapper.Map<List<ShortenedUrlDto>>(listUrlShortener)
             };
             return Ok(listUrl);
         }

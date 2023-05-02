@@ -36,7 +36,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["notiflix"],
+            "allowedCommonJsDependencies": ["notiflix", "qrcode"],
             "outputPath": "dist/spa",
             "index": "src/index.html",
             "main": "src/main.ts",

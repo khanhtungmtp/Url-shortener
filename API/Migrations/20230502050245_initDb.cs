@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDb : Migration
+    public partial class initDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,6 +19,7 @@ namespace API.Migrations
                     OriginalUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShortCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShortUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Hits = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

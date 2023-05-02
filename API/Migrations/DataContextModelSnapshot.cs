@@ -31,6 +31,9 @@ namespace API.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Hits")
+                        .HasColumnType("int");
+
                     b.Property<string>("OriginalUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

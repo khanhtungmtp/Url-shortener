@@ -26,6 +26,11 @@ namespace API.Controllers
             ShortenedUrl? shortenedUrl = await _context.ShortenedUrl.FirstOrDefaultAsync(x => x.ShortCode == shortCode);
             if (shortenedUrl == null)
                 return BadRequest(new OperationResult { IsSuccess = false, Message = "Url not found" });
+            else
+            {
+                shortenedUrl.Hits++;
+                await _context.SaveChangesAsync();
+            }
             return Ok(new { shortenedUrl.OriginalUrl });
         }
         [HttpGet("GetAllUrlShortener")]
@@ -34,16 +39,24 @@ namespace API.Controllers
             List<ShortenedUrl>? listUrlShortener = await _context.ShortenedUrl.AsQueryable().OrderByDescending(x => x.CreatedAt).ToListAsync();
             int? count = listUrlShortener?.Count();
             // get all url today
-            List<ShortenedUrl>? allshortenUrlToday = _context.ShortenedUrl
+            int allshortenUrlToday = _context.ShortenedUrl
                 .Where(s => EF.Functions.DateDiffDay(s.CreatedAt, DateTime.Today) == 0) // filter by the date component of the CreatedAt field
-                .ToList();
+                .ToList().Count();
+            // total count all hits
+            int allshortenUrlHits = _context.ShortenedUrl.AsQueryable().Select(x => x.Hits).ToList().Sum();
             AllShortenedUrlDto listUrl = new AllShortenedUrlDto
             {
                 Count = count,
-                CountToday = allshortenUrlToday.Count(),
+                CountToday = allshortenUrlToday,
+                CountHits = allshortenUrlHits,
                 ListShortenedUrl = _mapper.Map<List<ShortenedUrlDto>>(listUrlShortener)
             };
             return Ok(listUrl);
+        }
+        [HttpGet("GetAllMostPopularURLs")]
+        public async Task<IActionResult> GetAllMostPopularURLs()
+        {
+            return Ok(await _context.ShortenedUrl.AsQueryable().OrderByDescending(x => x.Hits).ToListAsync());
         }
         [HttpPost("CreateUrlShortener")]
         public async Task<IActionResult> CreateUrlShortener([FromForm] string longUrl)
@@ -68,6 +81,7 @@ namespace API.Controllers
                     ShortCode = shortCode,
                     OriginalUrl = longUrl,
                     ShortUrl = shortCode,
+                    Hits = 0,
                     CreatedAt = DateTime.Now
                 };
                 await _context.ShortenedUrl.AddAsync(shortenedUrl);

@@ -19,6 +19,9 @@ export class UrlShortenerService {
   getAllUrlShortener() {
     return this.http.get<AllShortenedUrl>(this.baseUrl + 'GetAllUrlShortener')
   }
+  getAllMostPopularURLs() {
+    return this.http.get<ShortenedUrl[]>(this.baseUrl + 'GetAllMostPopularURLs')
+  }
   createUrlShortener(longUrl: string) {
     const httpOptions = {
       headers: new HttpHeaders({

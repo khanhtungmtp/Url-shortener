@@ -78,7 +78,7 @@
         <ul class="list-group list-group-horizontal-md mt-4"
           style="width: 100%">
           <li class="list-group-item flex-fill">
-            Total Hits: <strong>3,757,984</strong>
+            Total Hits: <strong>{{allShortenedUrl.countHits}}</strong>
           </li>
           <li class="list-group-item flex-fill">
             Total URLs: <strong>{{allShortenedUrl.count}}</strong>
@@ -110,7 +110,7 @@
                   </td>
                   <td>{{item.originalUrl}}</td>
                   <td>{{item.createdAt | date:'dd/MM/yyyy, h:mm:ss a'}}</td>
-                  <td>2</td>
+                  <td>{{item.hits}}</td>
                 </tr>
               </ng-container>
             </tbody>
@@ -129,16 +129,19 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <a href="https://facebook.com/khanhtungmtp" target="_blank"
-                    rel="noopener">
-                    Khanh Tùng </a>
-                </td>
-                <td>https://lorem.com</td>
-                <td>2013-03-02 14:36:26</td>
-                <td>183,363</td>
-              </tr>
+              <ng-container *ngIf="listMostPopularURLs.length > 0">
+                <tr *ngFor="let item of listMostPopularURLs">
+                  <td>
+                    <a [href]="baseUrl + item.shortUrl" target="_blank"
+                      rel="noopener">
+                      {{baseUrl + item.shortUrl}}
+                    </a>
+                  </td>
+                  <td>{{item.originalUrl}}</td>
+                  <td>{{item.createdAt | date:'dd/MM/yyyy, h:mm:ss a'}}</td>
+                  <td>{{item.hits}}</td>
+                </tr>
+              </ng-container>
             </tbody>
           </table>
         </div>

@@ -21,6 +21,7 @@ export class HomeComponent extends InjectBase implements OnInit {
   shortenedUrl: ShortenedUrl = <ShortenedUrl>{}
   allShortenedUrl: AllShortenedUrl = <AllShortenedUrl>{}
   listShortenedUrl: ShortenedUrl[] | null = []
+  listMostPopularURLs: ShortenedUrl[] = []
   constructor(private service: UrlShortenerService,
     private route: ActivatedRoute) {
     super();
@@ -28,6 +29,7 @@ export class HomeComponent extends InjectBase implements OnInit {
 
   ngOnInit(): void {
     this.getAllUrlShortener();
+    this.getAllMostPopularURLs();
     this.shortCode = this.route.snapshot.paramMap.get('shortCode') ?? '';
     if (this.shortCode != "")
       this.getUrlShortener();
@@ -55,6 +57,18 @@ export class HomeComponent extends InjectBase implements OnInit {
       next: (res: AllShortenedUrl) => {
         this.allShortenedUrl = res;
         this.listShortenedUrl = this.allShortenedUrl.listShortenedUrl;
+        this.notiflix.hideLoading();
+      },
+      error: () => {
+        this.notiflix.hideLoading();
+      }
+    })
+  }
+  getAllMostPopularURLs() {
+    this.notiflix.showLoading();
+    this.service.getAllMostPopularURLs().subscribe({
+      next: (res: ShortenedUrl[]) => {
+        this.listMostPopularURLs = res;
         this.notiflix.hideLoading();
       },
       error: () => {

@@ -44,7 +44,7 @@ export class HomeComponent extends InjectBase implements OnInit {
         this.notiflix.hideLoading();
       },
       error: (e) => {
-        this.notiflix.error(e.error.message)
+        this.errorHandler(e)
         setInterval(() => {
           window.location.href = window.location.origin
         }, 3000)
@@ -60,7 +60,7 @@ export class HomeComponent extends InjectBase implements OnInit {
         this.notiflix.hideLoading();
       },
       error: () => {
-        this.notiflix.hideLoading();
+        this.errorHandler();
       }
     })
   }
@@ -72,7 +72,7 @@ export class HomeComponent extends InjectBase implements OnInit {
         this.notiflix.hideLoading();
       },
       error: () => {
-        this.notiflix.hideLoading();
+        this.errorHandler();
       }
     })
   }
@@ -93,7 +93,7 @@ export class HomeComponent extends InjectBase implements OnInit {
         setInterval(() => {
           this.errorMessage = ''
         }, 3000)
-        this.notiflix.hideLoading();
+        this.errorHandler();
       }
     })
   }
@@ -106,6 +106,12 @@ export class HomeComponent extends InjectBase implements OnInit {
     document.execCommand('copy');
     document.body.removeChild(inputElement);
     this.isCopied = true;
+  }
+
+  private errorHandler(error?: HttpErrorResponse): void {
+    if (error)
+      this.notiflix.error(error.error.message);
+    this.notiflix.hideLoading();
   }
 
 
